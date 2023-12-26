@@ -2052,7 +2052,7 @@
   (symbol (lib_id "Device:R") (at 236.22 36.83 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 2e21b395-1819-4ac3-a882-2c74fbf860cd)
-    (property "Reference" "R8" (at 236.22 32.234 90)
+    (property "Reference" "R5" (at 236.22 32.234 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "0" (at 236.22 34.282 90)
@@ -2069,7 +2069,7 @@
     (instances
       (project "duobot"
         (path "/bbb811a8-250b-4b92-a455-cbc7c5328174"
-          (reference "R8") (unit 1)
+          (reference "R5") (unit 1)
         )
       )
     )
@@ -2975,7 +2975,7 @@
   (symbol (lib_id "Device:R") (at 229.87 87.63 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid db631fdc-9099-4e32-94ec-9d8727d461d2)
-    (property "Reference" "R5" (at 229.87 83.034 90)
+    (property "Reference" "R8" (at 229.87 83.034 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "0" (at 229.87 85.082 90)
@@ -2992,7 +2992,7 @@
     (instances
       (project "duobot"
         (path "/bbb811a8-250b-4b92-a455-cbc7c5328174"
-          (reference "R5") (unit 1)
+          (reference "R8") (unit 1)
         )
       )
     )
