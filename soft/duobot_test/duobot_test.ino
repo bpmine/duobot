@@ -81,28 +81,29 @@ void runMotorRight(int dir,unsigned long steps)
 void runMotor(int isleft,int dir,  unsigned long steps) {
   int PIN_STAGE_10;
   int PIN_STAGE_9;
-
+  int PIN_STAGE_2;
   if (isleft) { 
     digitalWrite(PIN_DIR_GHE,dir);
-    digitalWrite(PIN_EN_GHE,LOW);
+    PIN_STAGE_2 = PIN_EN_GHE;
     PIN_STAGE9 = PIN_STEP_GHE;
     PIN_STAGE10 = PIN_EN_GHE;
     } 
   else 
   {
-    digitalWrite(PIN_DIR_DTE,dir==HIGH?LOW:HIGH);  
-    digitalWrite(PIN_EN_DTE,LOW);
+    digitalWrite(PIN_DIR_DTE,dir==HIGH?LOW:HIGH);
+    PIN_STAGE_2  = PIN_EN_DTE
     PIN_STAGE_9 = PIN_STEP_DTE;
     PIN_STAGE_10 =PIN_EN_DTE;
   }
 
+  digitalWrite(PIN_STAGE_2,LOW);
   delay(10);
     
   for (unsigned long i=0;i<steps;i++)
     {
-      digitalWrite(PIN_STAGE9,HIGH);
+      digitalWrite(PIN_STAGE_9,HIGH);
       delayMicroseconds(100);
-      digitalWrite(PIN_SSTAGE9,LOW);
+      digitalWrite(PIN_SSTAGE_9,LOW);
       delayMicroseconds(100);
     }
   digitalWrite(PIN_STEP_10, HIGH);    
