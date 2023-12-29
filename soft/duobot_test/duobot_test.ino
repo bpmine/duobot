@@ -88,7 +88,7 @@ void runMotor(int isleft,int dir,  unsigned long steps) {
     } 
   else {
     digitalWrite(PIN_DIR_DTE,dir==HIGH?LOW:HIGH);
-    PIN_EN  = PIN_EN_DTE
+    PIN_EN  = PIN_EN_DTE;
     PIN_STEP = PIN_STEP_DTE;
   }
 
