@@ -96,15 +96,18 @@ void runMotorRight(int dir,unsigned long steps)
            steps);
 }
 
-void runMotor(int isleft,int dir,  unsigned long steps) {
+void runMotor(int isleft,int dir,  unsigned long steps)
+{
   int PIN_EN;
   int PIN_STEP;
-  if (isleft) { 
+  if (isleft) 
+  { 
     digitalWrite(PIN_DIR_GHE,dir);
     PIN_EN = PIN_EN_GHE;
     PIN_STEP = PIN_STEP_GHE;
-    } 
-  else {
+  } 
+  else
+  {
     digitalWrite(PIN_DIR_DTE,dir==HIGH?LOW:HIGH);
     PIN_EN  = PIN_EN_DTE;
     PIN_STEP = PIN_STEP_DTE;
@@ -118,7 +121,7 @@ void runMotor(int isleft,int dir,  unsigned long steps) {
       digitalWrite(PIN_STEP,HIGH);
       delayMicroseconds(100);
       digitalWrite(PIN_STEP,LOW);
-      delayMicroseconds(100);
+      delayMicroseconds(500);
     }
   digitalWrite(PIN_EN, HIGH);    
 }
