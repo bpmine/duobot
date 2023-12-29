@@ -1,4 +1,4 @@
-#include <GY521.h>
+#include <Wire.h>
 
 #define PIN_DIR_DTE     (3)
 #define PIN_STEP_DTE    (4)
@@ -11,29 +11,47 @@
 #define PIN_M1          (10)
 #define PIN_M0          (11)
 
-GY521 sensor(0x68);
+#define MPU_ADDR        (0x68)
+#define MPU_REG_POWER   (0x6B)
+#define MPU_REG_MEASURE (0x3B)
 
-void init_gy521()
+#define MIN_VAL 265
+#define MAX_VAL 402
+
+void init_mpu()
 {
   Wire.begin();
+  Wire.beginTransmission(MPU_ADDR);
+  Wire.write(MPU_REG_POWER);
+  Wire.write(0);
+  Wire.endTransmission(true);
+}
 
-  delay(100);
-  while (sensor.wakeup() == false)
-  {
-    Serial.println("\tImpossible de se connecteur au GY521");
-    delay(1000);
-  }
-  sensor.setAccelSensitivity(0);  //  2g
-  sensor.setGyroSensitivity(0);   //  250 degrees/s
-
-  sensor.setThrottle();
+int mpu_read_angle(void)
+{
+  int16_t AcX,AcY,AcZ;
+  double x;
   
-  sensor.axe = -0.1128369;
-  sensor.aye = 0.0038721;
-  sensor.aze = -1.0322095;
-  sensor.gxe = 8.0835113;
-  sensor.gye = -1.0030534;
-  sensor.gze = -0.5611451;  
+  Wire.beginTransmission(MPU_ADDR);
+  Wire.write(MPU_REG_MEASURE);
+  Wire.endTransmission(false);
+  Wire.requestFrom(MPU_ADDR,14,true);
+  AcX=Wire.read()<<8|Wire.read();
+  AcY=Wire.read()<<8|Wire.read();
+  AcZ=Wire.read()<<8|Wire.read();
+  int xAng = map(AcX,MIN_VAL,MAX_VAL,-90,90);
+  int yAng = map(AcY,MIN_VAL,MAX_VAL,-90,90);
+  int zAng = map(AcZ,MIN_VAL,MAX_VAL,-90,90);
+  
+  x= RAD_TO_DEG * (atan2(-yAng, -zAng)+PI);
+
+  if (x>360)
+    x=360;
+    
+  if (x>120)
+    return -(360-x);
+  else
+    return x;
 }
 
 void setup() 
@@ -62,7 +80,7 @@ void setup()
   pinMode(PIN_M2,OUTPUT);
   digitalWrite(PIN_M2,HIGH);
 
-  init_gy521();
+  init_mpu();
 }
 
 void runMotorLeft(int dir,unsigned long steps)
@@ -157,43 +175,18 @@ void serialEvent()
   }
 }
 
-int counter=0;
-
 void loop() 
 {
-  delay(100);
+  unsigned long t=millis();
+  
+  delay(1000);
 
-  sensor.read();
-  int ax = sensor.getAccelX();
-  int ay = sensor.getAccelY();
-  int az = sensor.getAccelZ();
-  int gx = sensor.getGyroX();
-  int gy = sensor.getGyroY();
-  int gz = sensor.getGyroZ();
-  int t = sensor.getTemperature();
+  int ang=mpu_read_angle();
+  Serial.print("Angle: ");
+  Serial.println(ang);
 
-  if (counter % 10 == 0)
-  {
-    Serial.println("\n\tACCELEROMETER\t\tGYROSCOPE\t\tTEMPERATURE");
-    Serial.println("\tax\tay\taz\tgx\tgy\tgz\tT");
-  }
-
-  Serial.print(counter);
-  Serial.print('\t');
-  Serial.print(ax);
-  Serial.print('\t');
-  Serial.print(ay);
-  Serial.print('\t');
-  Serial.print(az);
-  Serial.print('\t');
-  Serial.print(gx);
-  Serial.print('\t');
-  Serial.print(gy);
-  Serial.print('\t');
-  Serial.print(gz);
-  Serial.print('\t');
-  Serial.print(t);
-  Serial.println();
-
-  counter++;
+  /*if (ang>10)
+    runMotors(LOW,1000);
+  else if (ang<-10)
+    runMotors(HIGH,1000);*/
 }
