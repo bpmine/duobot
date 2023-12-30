@@ -170,86 +170,88 @@ void setup()
   init_timer();
 }
 
+void AVANCE() {
+  Serial.println("AV gauche");
+  g_enabled=true;
+  g_speed=abs(g_speed);  
+}
+void STOP() {
+ Serial.println("Stop");
+ g_enabled=false;
+ }
+
+void ARRIERE() {
+  Serial.println("AR gauche");
+  g_enabled=true;
+  g_speed=-abs(g_speed);
+}
+void SPEED_0() {
+  Serial.println("Speed 0");
+  g_speed=0;
+ }
+
+ void SPEED_1() {
+    Serial.println("Speed 1");
+   g_speed=1;
+}
+
+void SPEED_2() {
+  Serial.println("Speed 2");
+  g_speed=20;
+ }
+
+void SPEED_3(){
+  Serial.println("Speed 3");
+  g_speed=50;
+}
+void SPEED_4 () {
+  Serial.println("Speed 4");
+  g_speed=80;
+ }
+
+ void SPEED_5() {
+  Serial.println("Speed 5");
+  g_speed=100;
+}
+void ERROR(){
+   Serial.println("ERROR");
+}
+
 void serialEvent()
 {  
   int cmd=Serial.read();
-  if (cmd=='a')
-  {
-
-    AVANCE();
-
-    void AVANCE() {
-       Serial.println("AV gauche");
-       g_enabled=true;
-       g_speed=abs(g_speed);  
-    }
-  }
-  else if (cmd=='q')
-  {
-
-    STOP();
-    void STOP() {
-    Serial.println("Stop");
-    g_enabled=false;
-    }
-  }
-  else if (cmd=='w')
-  {
-    ARRIERE();
-    void ARRIERE(void) {
-       Serial.println("AR gauche");
-       g_enabled=true;
-       g_speed=-abs(g_speed);
-    }
-  }
-  else if (cmd=='0')
-  {
-    SPEED_0();
-    void SPEED_0() {
-    Serial.println("Speed 0");
-    g_speed=0;
-    }
-  }
-  else if (cmd=='1')
-  {
-        SPEED_1();
-    void SPEED_1() {
-       Serial.println("Speed 1");
-       g_speed=1;
-    }
-  }
-  else if (cmd=='2')
-  {
-    SPEED_2();
-   void SPEED_2() {
-    Serial.println("Speed 2");
-    g_speed=20;
-   }
-  }
-  else if (cmd=='3')
-  {
-    SPEED_3();
-    void SPEED_3[]{
-    Serial.println("Speed 3");
-    g_speed=50;
-    }
-  }
-  else if (cmd=='4')
-  {
-    SPEED_4();
-    void SPEED_4 () {
-    Serial.println("Speed 4");
-    g_speed=80;
-    }
-  }
-  else if (cmd=='5')
-  {
-    SPEED_5();
-    SPEED_5() {
-    Serial.println("Speed 5");
-    g_speed=100;
-    }
-  }
+  switch (cmd) {
+    case 'a':
+       BREAK();
+       break;
+    case 'q':
+      STOP();
+      break;
+    case 'w':
+      ARRIERE();
+      break;
+    case '0':
+      SPEED_0();
+      break;
+    case '1':
+     SPEED_1();
+     break;
+    case '2':
+     SPEED_2();
+     break;
+    case '3':
+     SPEED_3();
+     break;
+    case '4':
+      SPEED_4();
+      break;
+    case '5':
+      SPEED_5();
+      break;
+    default:
+      ERROR();
+      break;
+  }   
 }
 
 void loop() 
